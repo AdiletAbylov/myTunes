@@ -12,7 +12,8 @@ end
 def process_file(path)
 	if File.extname(path) == ".mp3"
 		Mp3Info.open(path) do |info|
-			new_file_name = [info.tag.artist, info.tag.album, "%02d" % info.tag.tracknum?:0, info.tag.title ].join(" - ")
+			tracknum = info.tag.tracknum != nil ? info.tag.tracknum : 0
+			new_file_name = [info.tag.artist, info.tag.album, "%02d" % info.tag.tracknum, info.tag.title ].join(" - ")
 			new_file_name = sanitize_filename(new_file_name)
 			puts new_file_name
 			File.rename(path, new_file_name + ".mp3")
