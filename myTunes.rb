@@ -12,8 +12,8 @@ end
 def process_file(path)
 	if File.extname(path) == ".mp3"
 		Mp3Info.open(path) do |info|
-			tracknum = info.tag.tracknum != nil ? info.tag.tracknum : 0
-			new_file_name = [info.tag.artist, info.tag.album, "%02d" % info.tag.tracknum, info.tag.title ].join(" - ")
+			tracknum = info.tag.tracknum != nil ? info.tag.tracknum : 0;
+			new_file_name = [info.tag.artist, info.tag.album, "%02d" % tracknum, info.tag.title ].join(" - ")
 			new_file_name = sanitize_filename(new_file_name)
 			puts new_file_name
 			File.rename(path, new_file_name + ".mp3")
@@ -31,7 +31,7 @@ def sanitize_filename(filename)
   # We now have one or two parts (depending on whether we could find
   # a suitable period). For each of these parts, replace any unwanted
   # sequence of characters with an underscore
-  fn.map! { |s| s.gsub /[^a-z0-9\-]+/i, '_' }
+  fn.map! { |s| s.gsub /[^[[:alnum:]][[:space:]]\-]+/i, '_' }
 
   # Finally, join the parts with a period and return the result
   return fn.join '.'
